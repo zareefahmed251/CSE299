@@ -1,0 +1,321 @@
+  
+    :root {
+      --primary: #2563eb;
+      --primary-soft: rgba(37, 99, 235, 0.08);
+      --bg-bar: #f8fafc;
+      --border-light: #e2e8f0;
+      --text-main: #1e293b;
+      --text-muted: rgba(30, 41, 59, 0.35);
+      --green: #22c55e;
+      --font-ui: system-ui, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      color: inherit;
+      caret-color: transparent;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: row-reverse;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    aside {
+      width: 40px;
+      flex-shrink: 0;
+      background: red;
+    }
+
+    main {
+      flex: 1;
+      min-width: 0;
+      height: 100svh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(45deg, #d1e7ff, #62adff);
+    }
+
+    /* Top calendar & timeline strips */
+    .date-selector {
+      height: 44px;
+      width: 100%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      padding: 0 12px;
+      overflow-x: auto;
+      background-color: var(--bg-bar);
+      border-bottom: 1px solid var(--border-light);
+      font-family: var(--font-ui);
+    }
+
+    #hour-strip {
+      border-top: 1px solid var(--border-light);
+      gap: 16px;
+    }
+
+    .month-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* Shared circular buttons */
+    .nav-btn,
+    .date-item {
+      position: relative;
+      appearance: none;
+      -webkit-appearance: none;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .nav-btn {
+      width: 32px;
+      height: 32px;
+    }
+
+    .nav-btn:not(:disabled):hover {
+      background-color: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .nav-btn:disabled {
+      color: rgba(30, 41, 59, 0.3);
+      cursor: not-allowed;
+    }
+
+    .date-item {
+      width: 34px;
+      height: 34px;
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .date-item span {
+      position: relative;
+      z-index: 2;
+      line-height: 1;
+    }
+
+    .date-item:not(.future):hover {
+      background-color: var(--primary-soft);
+    }
+
+    .date-item.future {
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+
+    .date-item.today::before,
+    .date-item.selected::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    .date-item.today::before {
+      margin: auto;
+      width: 26px;
+      height: 26px;
+      border: 2px solid #2c5cc6;
+    }
+
+    .date-item.today span {
+      color: #000;
+      font-weight: 600;
+    }
+
+    .date-item.selected::after {
+      border: 2px solid var(--primary);
+    }
+
+    .date-item.selected:not(.today) span {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .date-item.has-snapshot span::before {
+      content: "";
+      position: absolute;
+      top: calc(100% + 1px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: var(--green);
+    }
+
+    /* Continuous 24-hour track */
+    .hour-track {
+      position: relative;
+      flex: 1;
+      height: 32px;
+      cursor: pointer;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .hour-track.future-hover {
+      cursor: not-allowed;
+    }
+
+    .hour-tick,
+    .current-time-marker,
+    .selected-time-handle,
+    .record-line {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .hour-tick {
+      width: 2px;
+      height: 14px;
+      border-radius: 2px;
+      background-color: #94a3b8;
+    }
+
+    .hour-tick.future {
+      opacity: 0.3;
+    }
+
+    .current-time-marker {
+      width: 2.5px;
+      height: 20px;
+      border-radius: 2px;
+      background-color: var(--primary);
+      z-index: 2;
+    }
+
+    .record-line {
+      width: 2.5px;
+      height: 22px;
+      border-radius: 2px;
+      background-color: var(--green);
+      z-index: 2;
+    }
+
+    .selected-time-handle {
+      width: 2px;
+      height: 24px;
+      background-color: var(--primary);
+      z-index: 3;
+    }
+
+    .selected-time-handle::before {
+      content: "";
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #fff;
+      border: 2px solid var(--primary);
+    }
+
+    .time-display {
+      flex-shrink: 0;
+      min-width: 74px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background-color: #eff6ff;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+    }
+
+    /* Map & Layer Controls */
+    #visuals {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+    }
+
+    #controls {
+      width: 300px;
+      flex-shrink: 0;
+      background-color: #fff;
+      color: #000;
+      padding: 20px 16px;
+      border-right: 1px solid #334155;
+    }
+
+    #controls ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #controls li label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid transparent;
+      transition: background-color 0.2s, border-color 0.2s;
+      user-select: none;
+    }
+
+    #controls li label:hover {
+      background-color: rgb(178, 186, 255);
+    }
+
+    #controls li.active label,
+    #controls li:has(input:checked) label {
+      background-color: #8faef3;
+      border-color: #60a5fa;
+      font-weight: 600;
+    }
+
+    #controls input[type="radio"] {
+      accent-color: #93c5fd;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    #map {
+      flex: 1;
+      position: relative;
+      background-color: #0f172a;
+      overflow: hidden;
+    }
+
+    #map img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.25s ease;
+    }
+  
